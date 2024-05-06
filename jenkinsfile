@@ -33,6 +33,7 @@ pipeline {
             steps {
                 script {
                     sh ''' 
+                    kubectl get po -A
                     kubectl apply -f springBootMongo.yml
                     kubectl set image deployment/springappdeployment springappcontainer=kk2104/springapp:v$BUILD_ID  -n springboot --record=true'''
                     
