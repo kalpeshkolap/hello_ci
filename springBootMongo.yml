@@ -13,7 +13,7 @@ spec:
   accessModes:
     - ReadWriteMany
   nfs:
-    server: 10.0.109.10
+    server: 10.0.109.1
     path: "/mnt/nfs/nfs-dev-erp-pv/erp/images"
 
 ---
