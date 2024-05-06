@@ -1,0 +1,42 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('checkout code ') {
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/kalpeshkolap/hello_ci.git']]])
+            }
+        }
+        stage('build package') {
+            steps {
+                script {
+                    sh 'mvn clean package'
+                }
+            }
+        }
+        stage('docker build') {
+            steps {
+                script {
+                    sh 'docker build -t kk2104/springapp:v$BUILD_ID .'
+                }
+            }
+        }
+        stage('pushing image to registry') {
+            steps {
+                script {
+                    sh ''' docker push kk2104/springapp:v$BUILD_ID 
+                           docker rmi  kk2104/springapp:v$BUILD_ID '''
+                }
+            }
+        }
+        stage('deploy app') {
+            steps {
+                script {
+                    sh ''' 
+                    kubectl config use-context PROD-RAILTEL
+                    kubectl apply -f .'''
+                }
+            }
+        }
+    }
+}
