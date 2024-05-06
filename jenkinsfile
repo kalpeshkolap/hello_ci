@@ -33,7 +33,7 @@ pipeline {
             steps {
                 script {
                     sh ''' 
-                    kubectl config use-context docker-desktop
+                    kubectl  config use-context docker-desktop
                     kubectl create ns springboot
                     kubectl apply -f .
                     kubectl set image deployment/springappdeployment springappcontainer=kk2104/springapp:v$BUILD_ID  -n springboot --record=true'''
