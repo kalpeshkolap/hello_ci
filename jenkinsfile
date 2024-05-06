@@ -10,7 +10,7 @@ pipeline {
         stage('docker build') {
             steps {
                 script {
-                    sh 'docker build -t kk2104/springapp:v$BUILD_ID .'
+                    sh 'docker build -t kk2104/springapp:v$BUILD_ID . --no-cache'
                 }
             }
         }
