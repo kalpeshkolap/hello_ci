@@ -33,7 +33,7 @@ pipeline {
             steps {
                 script {
                     sh ''' 
-                    kubectl apply -f .
+                    kubectl apply -f . --validate=false
                     kubectl set image deployment/springappdeployment springappcontainer=kk2104/springapp:v$BUILD_ID  -n springboot --record=true'''
                     
                 }
