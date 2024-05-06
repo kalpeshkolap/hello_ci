@@ -7,13 +7,6 @@ pipeline {
                 checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/kalpeshkolap/hello_ci.git']]])
             }
         }
-        stage('build package') {
-            steps {
-                script {
-                    sh 'mvn clean package'
-                }
-            }
-        }
         stage('docker build') {
             steps {
                 script {
