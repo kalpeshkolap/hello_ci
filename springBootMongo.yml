@@ -13,8 +13,8 @@ spec:
   accessModes:
     - ReadWriteMany
   nfs:
-    server: 10.0.109.10
-    path: "/mnt/nfs/nfs-dev-erp-pv/erp/images"
+    server: 192.168.43.174
+    path: "/home/omkar/nfsfilesystem"
 
 ---
 apiVersion: v1
