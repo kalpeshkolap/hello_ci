@@ -1,16 +1,17 @@
+---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: nfs-volume
+  name: springpv
   labels:
-    type: nfs-volume
+    type: nfs-storage
   namespace: springboot
 spec:
-  storageClassName: nfs-volume
+  storageClassName: springboot
   capacity:
-    storage: 2Gi
+    storage: 40Gi
   accessModes:
-  - ReadWriteMany
+    - ReadWriteMany
   nfs:
     server: 10.0.109.10
     path: "/mnt/nfs/nfs-dev-erp-pv/erp/images"
@@ -19,18 +20,19 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: nfs-volume-pvc
+  name: springboot-pvc
   labels:
-    type: nfs-volume
+    type: nfs-storage
   namespace: springboot
 spec:
-  storageClassName: nfs-volume
+  storageClassName: springboot
   accessModes:
-  - ReadWriteMany
+    - ReadWriteMany
   resources:
     requests:
-      storage: 2Gi
+      storage: 40Gi
 ---
+
 
 kind: ConfigMap
 apiVersion: v1
@@ -120,7 +122,7 @@ spec:
        volumes:
        - name: mongodb-pvc
          persistentVolumeClaim:
-           claimName: nfs-volume-pvc
+           claimName: springboot-pvc
        containers:
        - name: mongodbcontainer
          image: mongo
