@@ -1,7 +1,42 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-volume
+  labels:
+    type: nfs-volume
+  namespace: springboot
+spec:
+  storageClassName: nfs-volume
+  capacity:
+    storage: 2Gi
+  accessModes:
+  - ReadWriteMany
+  nfs:
+    server: 10.0.109.10
+    path: "/mnt/nfs/nfs-dev-erp-pv/erp/images"
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-volume-pvc
+  labels:
+    type: nfs-volume
+  namespace: springboot
+spec:
+  storageClassName: nfs-volume
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 2Gi
+---
+
 kind: ConfigMap
 apiVersion: v1
 metadata:
   name: springappconfigmap
+  namespace: springboot
 data:
   username: springapp
   password: mongodb@123
@@ -11,6 +46,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: springappsecrets
+  namespace: springboot
 type: Opaque
 stringData:   # We can define multiple key value pairs.
   password: devdb@123
@@ -21,6 +57,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: springappdeployment
+  namespace: springboot
 spec:
   replicas: 2
   selector:
@@ -55,6 +92,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: springapp
+  namespace: springboot
 spec:
   selector:
     app: springapp
@@ -68,6 +106,7 @@ apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
   name: mongodbrs
+  namespace: springboot
 spec:
   selector:
     matchLabels:
@@ -81,7 +120,7 @@ spec:
        volumes:
        - name: mongodb-pvc
          persistentVolumeClaim:
-           claimName: pvc-hostpath
+           claimName: nfs-volume-pvc
        containers:
        - name: mongodbcontainer
          image: mongo
@@ -106,6 +145,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mongo
+  namespace: springboot
 spec:
   type: ClusterIP
   selector:
